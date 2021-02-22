@@ -9,13 +9,11 @@ from .storage_model import StorageModel
 class StorageComparison(RuleBasedStateMachine):
     def __init__(self):
         super(StorageComparison, self).__init__()
-        print("X")
         self.sc, self.sp = common.init(unlock=True)
         self.sm = StorageModel()
         self.sm.init(b"")
         self.sm.unlock("")
         self.storages = (self.sc, self.sp, self.sm)
-        print("Y")
 
     keys = Bundle("keys")
     values = Bundle("values")
