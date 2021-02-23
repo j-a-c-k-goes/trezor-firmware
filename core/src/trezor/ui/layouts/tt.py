@@ -51,6 +51,7 @@ __all__ = (
     "confirm_metadata",
     "confirm_replacement",
     "confirm_modify_fee",
+    "confirm_coinjoin",
 )
 
 
@@ -61,6 +62,7 @@ async def confirm_action(
     action: str = None,
     description: str = None,
     description_param: str = None,
+    description_param_font: int = ui.BOLD,
     verb: Union[str, bytes, None] = Confirm.DEFAULT_CONFIRM,
     verb_cancel: Union[str, bytes, None] = Confirm.DEFAULT_CANCEL,
     hold: bool = False,
@@ -80,7 +82,9 @@ async def confirm_action(
 
     if reverse and description is not None:
         text.format_parametrized(
-            description, description_param if description_param is not None else ""
+            description,
+            description_param if description_param is not None else "",
+            param_font=description_param_font,
         )
     elif action is not None:
         text.bold(action)
@@ -94,7 +98,9 @@ async def confirm_action(
         text.bold(action)
     elif description is not None:
         text.format_parametrized(
-            description, description_param if description_param is not None else ""
+            description,
+            description_param if description_param is not None else "",
+            param_font=description_param_font,
         )
 
     cls = HoldToConfirm if hold else Confirm
@@ -527,6 +533,22 @@ async def confirm_modify_fee(
     text.bold(total_fee_new)
     return is_confirmed(
         await interact(ctx, HoldToConfirm(text), "modify_fee", ButtonRequestType.SignTx)
+    )
+
+
+async def confirm_coinjoin(
+    ctx: wire.GenericContext, fee_per_anonymity: Optional[str], total_fee: str
+) -> bool:
+    text = Text("Authorize CoinJoin", ui.ICON_RECOVERY, new_lines=False)
+    if fee_per_anonymity is not None:
+        text.normal("Fee per anonymity set:\n")
+        text.bold("{} %\n".format(fee_per_anonymity))
+    text.normal("Maximum total fees:\n")
+    text.bold(total_fee)
+    return is_confirmed(
+        await interact(
+            ctx, HoldToConfirm(text), "coinjoin_final", ButtonRequestType.Other
+        )
     )
 
 
