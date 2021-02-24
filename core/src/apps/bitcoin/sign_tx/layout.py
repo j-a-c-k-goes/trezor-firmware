@@ -59,9 +59,10 @@ async def confirm_output(
             layout = layouts.confirm_hex(
                 ctx,
                 "op_return",
-                "OP_RETURN",
-                hexlify(data).decode(),
-                ButtonRequestType.ConfirmOutput,
+                title="OP_RETURN",
+                data=hexlify(data).decode(),
+                br_code=ButtonRequestType.ConfirmOutput,
+                truncate=True,
             )
     else:
         assert output.address is not None
