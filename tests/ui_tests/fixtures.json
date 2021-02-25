@@ -515,7 +515,7 @@
 "test_msg_signtx_replacement.py::test_p2wpkh_payjoin[19909800-89859-0248304502210097a42b35d3-89bd0d1d": "a5473b5f3931fb6530a991e45aa32507069a7b402878d1eda2ce6e8be1a673e1",
 "test_msg_signtx_replacement.py::test_p2wpkh_payjoin[19909859-89800-02483045022100af3a874c96-7f9eee73": "d348b58a6c9e241cc9edef37e10a87907db00eae14a251e7ce53250967c817d5",
 "test_msg_signtx_replacement.py::test_p2wpkh_payjoin[19909859-89859-02483045022100eb74abb36f-42ad4639": "a5473b5f3931fb6530a991e45aa32507069a7b402878d1eda2ce6e8be1a673e1",
-"test_msg_signtx_replacement.py::test_tx_meld": "ca1c8391b809720f0200904a8e64aeff37467a7cd2263b10dd489ff9045fd8ae",
+"test_msg_signtx_replacement.py::test_tx_meld": "62dca3511ac1b7d1e905e6a6915672f5263fe77beee8909500574e3efa934fd4",
 "test_msg_signtx_segwit.py-test_attack_change_input_address": "5ae71202c062ef7942626a80a4ceeb8d8c4ea5065a97f0de6a97505e9cb82c2c",
 "test_msg_signtx_segwit.py-test_attack_mixed_inputs": "f127a4766b23d9b6dfe0c41f9cf1ed13c0a883ea4e92e55961bcaf44bd152c02",
 "test_msg_signtx_segwit.py-test_send_multisig_1": "958a0741070e057dcb889b2000e5487d391bc513e4a5d86193a355261c5f361b",
