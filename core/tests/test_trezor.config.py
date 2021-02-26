@@ -81,31 +81,48 @@ class TestConfig(unittest.TestCase):
         self.assertEqual(v2, value16)
 
     def test_change_pin(self):
-        PIN1 = '000'
-        PIN2 = '3141592653589793238462643383279502884197'
         config.init()
         config.wipe()
         self.assertTrue(config.unlock('', None))
-        with self.assertRaises(RuntimeError):
-            config.set(PINAPP, PINKEY, b'value')
-        self.assertFalse(config.change_pin(PIN1, '666', None, None))
-        self.assertTrue(config.change_pin('', PIN1, None, None))
-        self.assertEqual(config.get(PINAPP, PINKEY), None)
         config.set(1, 1, b'value')
-        config.change_pin(PIN1, PIN2, None, None)
-        config.init()
-        self.assertFalse(config.unlock(PIN1, None))
-        with self.assertRaises(RuntimeError):
-            config.set(PINAPP, PINKEY, b'value')
-        self.assertTrue(config.unlock(PIN2, None))
-        self.assertEqual(config.get(1, 1), b'value')
-        config.init()
-        self.assertTrue(config.unlock(PIN2, None))
-        config.change_pin(PIN2, '', None, None)
-        config.init()
-        self.assertFalse(config.unlock(PIN2, None))
-        self.assertTrue(config.unlock('', None))
-        self.assertEqual(config.get(1, 1), b'value')
+        PINS = ('123', '123', 'Trezor T', '3141592653589793238462643383279502884197', '')
+        old_pin = ''
+        for new_pin in PINS:
+            self.assertTrue(config.unlock(old_pin, None))
+
+            # The APP namespace which is reserved for storage related values is inaccessible even
+            # when unlocked.
+            with self.assertRaises(RuntimeError):
+                config.set(PINAPP, PINKEY, b'value')
+
+            self.assertTrue(config.change_pin(old_pin, new_pin, None, None))
+
+            # Old PIN cannot be used to change the current PIN.
+            if old_pin != new_pin:
+                self.assertFalse(config.change_pin(old_pin, '666', None, None))
+
+            # Storage remains unlocked.
+            self.assertEqual(config.get(1, 1), b'value')
+
+            # The APP namespace which is reserved for storage related values is inaccessible even
+            # when unlocked.
+            self.assertEqual(config.get(PINAPP, PINKEY), None)
+
+            # Old PIN cannot be used to unlock storage.
+            if old_pin != new_pin:
+                config.init()
+                self.assertFalse(config.unlock(old_pin, None))
+                self.assertEqual(config.get(1, 1), None)
+                with self.assertRaises(RuntimeError):
+                    config.set(1, 1, b'new value')
+
+            # New PIN unlocks the storage.
+            self.assertTrue(config.unlock(new_pin, None))
+            self.assertEqual(config.get(1, 1), b'value')
+
+            # Lock the storage.
+            config.init()
+            old_pin = new_pin
 
     def test_change_sd_salt(self):
         salt1 = b"0123456789abcdef0123456789abcdef"
