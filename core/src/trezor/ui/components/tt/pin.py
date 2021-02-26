@@ -106,7 +106,7 @@ class PinDialog(ui.Layout):
         prompt: str,
         subprompt: Optional[str],
         allow_cancel: bool = True,
-        maxlength: Optional[int] = None,
+        maxlength: Optional[int] = 50,
     ) -> None:
         self.maxlength = maxlength
         self.input = PinInput(prompt, subprompt, "")
