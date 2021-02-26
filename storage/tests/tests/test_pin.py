@@ -17,12 +17,13 @@ def test_change_pin():
     sc, sp = common.init(unlock=True)
     for s in (sc, sp):
         assert s.change_pin("", "222")
-        assert not s.change_pin("9999", "")  # invalid old PIN
+        assert not s.change_pin("9999", "")  # invalid PIN
         assert s.unlock("222")
         assert s.change_pin("222", "99999")
-        assert s.change_pin("99999", "99")
-        assert s.unlock("99")
+        assert s.change_pin("99999", "Trezor")
+        assert s.unlock("Trezor")
         assert not s.unlock("9999")  # invalid PIN
+        assert not s.unlock("99999")  # invalid old PIN
 
     assert common.memory_equals(sc, sp)
 
